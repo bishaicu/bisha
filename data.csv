@@ -1,0 +1,4 @@
+Date,Hospital,Total Beds,Occupied Beds,ICU Patients,Discharges,Deaths,Re-admissions 48h,Infected Patients,Unplanned_Ext,Intubated Patients,VAP Cases,Ventilator Days,CLABSI Cases,Central Line Days,CAUTI Cases,Catheter Days,Pressure Ulcer Cases
+2025-07-13,King Abdullah Hospital,25,20,18,5,2,1,1,0,0,0,0,0,0,0,0,0
+2025-07-13,Tathleeth General Hospital,9,7,6,2,1,0,0,0,0,0,0,0,0,0,0,0
+2025-07-13,Al-Alaya General Hospital,7,5,5,1,0,0,0,0,0,0,0,0,0,0,0,0
