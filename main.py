@@ -3,20 +3,19 @@ import pandas as pd
 import plotly.express as px
 from datetime import datetime
 import pytz
-from streamlit_extras.switch_page_button import switch_page
-import streamlit as st
 
+# ---------- Guard Page ----------
 params = st.experimental_get_query_params()
 if params.get("page") != ["main"]:
     st.warning("🚫 Unauthorized. Please login first.")
     st.stop()
-# ---------- Login Guard ----------
+
 if "role" not in st.session_state:
-    st.error("🚫 You must be logged in. Redirecting to login...")
-    switch_page("Login")
+    st.error("🚫 You must be logged in. Please login again.")
+    st.stop()
 
 # ---------- Page Config ----------
-st.set_page_config(page_title="BISHA ICU KPI Dashboard", layout="wide")
+st.set_page_config(page_title="ICU KPI Dashboard", layout="wide")
 
 # ---------- Header and Time ----------
 col1, col2 = st.columns([1, 6])
@@ -26,7 +25,7 @@ with col2:
     st.markdown("<h1 style='color:white; font-size:40px;'>Asir Cluster Health Sector – Bisha Region</h1>", unsafe_allow_html=True)
 
 riyadh_time = datetime.now(pytz.timezone("Asia/Riyadh")).strftime("%Y-%m-%d %H:%M:%S")
-st.markdown(f"<h4 style='color:white;'>📅 {riyadh_time}</h4>", unsafe_allow_html=True)
+st.markdown(f"<h4 style='color:white;'>📅 Current Riyadh Time: {riyadh_time}</h4>", unsafe_allow_html=True)
 
 # ---------- Refresh Button ----------
 if st.button("🔁 Refresh Data"):
@@ -52,7 +51,7 @@ if st.session_state.role == "admin":
         col1, col2 = st.columns(2)
         col1.metric("Bed Occupancy Rate", f"{row['Bed Occupancy Rate']:.1f}%")
         col2.metric("Bed Turnover Rate", f"{row['Bed Turnover Rate']:.1f}%")
-    
+
     st.plotly_chart(px.bar(data, x="Hospital", y="Bed Occupancy Rate", color="Hospital"))
     st.plotly_chart(px.bar(data, x="Hospital", y="Bed Turnover Rate", color="Hospital"))
 
