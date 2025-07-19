@@ -39,11 +39,11 @@ for hospital in data["Hospital"].unique():
 st.subheader("🍩 Donut Charts: ICU Patient Outcomes")
 for hospital in data["Hospital"].unique():
     row = data[data["Hospital"] == hospital].iloc[0]
-    labels = ["Discharges", "Deaths", "Still in ICU"]
     discharged = row["Discharges"]
     deaths = row["Deaths"]
     remaining = row["ICU Patients"] - discharged - deaths
     values = [discharged, deaths, max(0, remaining)]
+    labels = ["Discharges", "Deaths", "Still in ICU"]
 
     fig = px.pie(
         names=labels,
@@ -70,5 +70,11 @@ for hospital in data["Hospital"].unique():
     col2.metric("Infection Rate", f"{row['Infection Rate']:.1f}%")
     col3.metric("VAP Rate", f"{row['VAP Rate']:.1f} / 1000d")
     col4.metric("CLABSI Rate", f"{row['CLABSI Rate']:.1f} / 1000d")
+
+    col1, col2, col3, col4 = st.columns(4)
+    col1.metric("CAUTI Rate", f"{row['CAUTI Rate']:.1f} / 1000d")
+    col2.metric("Re-admissions 48h", int(row["Re-admissions 48h"]))
+    col3.metric("Intubated Patients", int(row["Intubated Patients"]))
+    col4.metric("Pressure Ulcer Cases", int(row["Pressure Ulcer Cases"]))
 
     st.markdown("---")
