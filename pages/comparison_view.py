@@ -13,12 +13,7 @@ if "role" not in st.session_state:
 st.set_page_config(layout="wide")
 
 # ---------- Header and Time ----------
-col1, col2 = st.columns([1, 6])
-with col1:
-    st.image("logo.png", width=100)
-with col2:
-    st.markdown("<h1 style='color:white; font-size:40px;'>ICU KPI Comparison View – Bisha Region</h1>", unsafe_allow_html=True)
-
+st.markdown("<h1 style='color:white; font-size:40px;'>ICU KPI Comparison View – Bisha Region</h1>", unsafe_allow_html=True)
 riyadh_time = datetime.now(pytz.timezone("Asia/Riyadh")).strftime("%Y-%m-%d %H:%M:%S")
 st.markdown(f"<h5 style='color:white;'>📅 Current Riyadh Time: {riyadh_time}</h5>", unsafe_allow_html=True)
 
