@@ -1,5 +1,4 @@
 import streamlit as st
-from streamlit_extras.switch_page_button import switch_page
 
 # -------------- User Credentials --------------
 users = {
@@ -24,7 +23,9 @@ st.title("🔐 ICU Dashboard Login")
 # -------------- Already Logged In --------------
 if "username" in st.session_state and "role" in st.session_state:
     st.success(f"✅ Already logged in as `{st.session_state.username}`")
-    st.button("🔄 Go to Main", on_click=lambda: switch_page("main"))
+    if st.button("🔄 Go to Main"):
+        st.experimental_set_query_params(page="main")
+        st.rerun()
     st.stop()
 
 # -------------- Login Form --------------
@@ -36,6 +37,7 @@ if st.button("🔓 Login"):
         st.session_state["username"] = username
         st.session_state["role"] = users[username]["role"]
         st.success("✅ Login successful!")
-        switch_page("main")
+        st.experimental_set_query_params(page="main")
+        st.rerun()
     else:
         st.error("❌ Invalid username or password")
