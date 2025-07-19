@@ -5,11 +5,6 @@ from datetime import datetime
 import pytz
 
 # ---------- Login Guard ----------
-params = st.experimental_get_query_params()
-if params.get("page") != ["main"]:
-    st.warning("🚫 Unauthorized. Please login first.")
-    st.stop()
-
 if "role" not in st.session_state:
     st.error("🚫 You must be logged in.")
     st.stop()
