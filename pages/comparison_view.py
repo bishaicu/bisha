@@ -36,4 +36,39 @@ for hospital in data["Hospital"].unique():
     st.plotly_chart(fig, use_container_width=True)
 
 # ---------- Donut Chart: ICU Outcomes ----------
-st.subheader
+st.subheader("🍩 Donut Charts: ICU Patient Outcomes")
+for hospital in data["Hospital"].unique():
+    row = data[data["Hospital"] == hospital].iloc[0]
+    labels = ["Discharges", "Deaths", "Still in ICU"]
+    discharged = row["Discharges"]
+    deaths = row["Deaths"]
+    remaining = row["ICU Patients"] - discharged - deaths
+    values = [discharged, deaths, max(0, remaining)]
+
+    fig = px.pie(
+        names=labels,
+        values=values,
+        hole=0.5,
+        title=f"{hospital} - ICU Patient Status"
+    )
+    st.plotly_chart(fig, use_container_width=True)
+
+# ---------- KPI Metrics ----------
+st.subheader("📋 ICU KPI Metric Cards")
+for hospital in data["Hospital"].unique():
+    st.markdown(f"### 🏥 {hospital}")
+    row = data[data["Hospital"] == hospital].iloc[0]
+
+    col1, col2, col3, col4 = st.columns(4)
+    col1.metric("Bed Occupancy Rate", f"{row['Bed Occupancy Rate']:.1f}%")
+    col2.metric("Bed Turnover Rate", f"{row['Bed Turnover Rate']:.1f}%")
+    col3.metric("ICU Patients", int(row["ICU Patients"]))
+    col4.metric("Discharges", int(row["Discharges"]))
+
+    col1, col2, col3, col4 = st.columns(4)
+    col1.metric("Deaths", int(row["Deaths"]))
+    col2.metric("Infection Rate", f"{row['Infection Rate']:.1f}%")
+    col3.metric("VAP Rate", f"{row['VAP Rate']:.1f} / 1000d")
+    col4.metric("CLABSI Rate", f"{row['CLABSI Rate']:.1f} / 1000d")
+
+    st.markdown("---")
