@@ -4,7 +4,12 @@ import plotly.express as px
 from datetime import datetime
 import pytz
 from streamlit_extras.switch_page_button import switch_page
+import streamlit as st
 
+params = st.experimental_get_query_params()
+if params.get("page") != ["main"]:
+    st.warning("🚫 Unauthorized. Please login first.")
+    st.stop()
 # ---------- Login Guard ----------
 if "role" not in st.session_state:
     st.error("🚫 You must be logged in. Redirecting to login...")
