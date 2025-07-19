@@ -3,7 +3,11 @@ import pandas as pd
 import plotly.express as px
 from datetime import datetime
 import pytz
+from streamlit_extras.switch_page_button import switch_page
 
+if "role" not in st.session_state:
+    st.error("🚫 You must be logged in. Redirecting to login...")
+    switch_page("Login")
 if "role" not in st.session_state:
     st.error("🚫 You must be logged in. Redirecting to login...")
     from streamlit_extras.switch_page_button import switch_page
