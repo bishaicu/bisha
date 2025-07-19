@@ -16,7 +16,7 @@ if "role" not in st.session_state:
     switch_page("Login")
 
 # ---------- Page Config ----------
-st.set_page_config(page_title="ICU KPI Dashboard", layout="wide")
+st.set_page_config(page_title="BISHA ICU KPI Dashboard", layout="wide")
 
 # ---------- Header and Time ----------
 col1, col2 = st.columns([1, 6])
