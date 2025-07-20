@@ -48,6 +48,6 @@ if st.button("🔓 Login"):
         if users[username]["role"] == "admin":
             switch_page("comparison_view")
         else:
-            switch_page("editing")
+            switch_page("edi_view")
     else:
         st.error("❌ Invalid username or password")
