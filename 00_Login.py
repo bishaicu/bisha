@@ -1,4 +1,5 @@
 import streamlit as st
+from streamlit_extras.switch_page_button import switch_page
 
 # -------------- User Credentials --------------
 users = {
@@ -11,6 +12,7 @@ users = {
 # -------------- Page Config --------------
 st.set_page_config(page_title="Bisha ICU Dashboard Login", layout="centered")
 
+# -------------- Dark Theme --------------
 st.markdown("""
     <style>
     .stApp { background-color: #121212; color: white; }
@@ -23,9 +25,11 @@ st.title("🔐 Bisha ICU Dashboard Login")
 # -------------- Already Logged In --------------
 if "username" in st.session_state and "role" in st.session_state:
     st.success(f"✅ Already logged in as `{st.session_state.username}`")
-    if st.button("🔄 Go to Main"):
-        st.experimental_set_query_params(page="main")
-        st.rerun()
+    if st.button("🔄 Go to your page"):
+        if st.session_state["role"] == "admin":
+            switch_page("comparison_view")
+        else:
+            switch_page("editing")
     st.stop()
 
 # -------------- Login Form --------------
@@ -37,7 +41,9 @@ if st.button("🔓 Login"):
         st.session_state["username"] = username
         st.session_state["role"] = users[username]["role"]
         st.success("✅ Login successful!")
-        st.experimental_set_query_params(page="main")
-        st.rerun()
+        if users[username]["role"] == "admin":
+            switch_page("comparison_view")
+        else:
+            switch_page("editing")
     else:
         st.error("❌ Invalid username or password")
