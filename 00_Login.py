@@ -1,7 +1,5 @@
 import streamlit as st
-if st.button("🚪 Logout"):
-    st.session_state.clear()
-    st.rerun()
+
 # -------------- User Credentials --------------
 users = {
     "admin": {"password": "admin123", "role": "admin"},
@@ -21,6 +19,7 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
+# -------------- Title --------------
 st.title("🔐 Bisha ICU Dashboard Login")
 
 # -------------- Already Logged In --------------
@@ -28,7 +27,7 @@ if "username" in st.session_state and "role" in st.session_state:
     st.success(f"✅ Already logged in as `{st.session_state.username}`")
 
     if st.session_state["role"] == "admin":
-        st.markdown("[👉 Go to Comparison View](./comparison_view)")
+        st.markdown("[📊 Go to Comparison View](./comparison_view)")
     else:
         st.markdown("[📝 Go to Editing Page](./editing)")
 
@@ -45,7 +44,7 @@ if st.button("🔓 Login"):
         st.success("✅ Login successful!")
 
         if users[username]["role"] == "admin":
-            st.markdown("[👉 Proceed to Comparison View](./comparison_view)")
+            st.markdown("[📊 Proceed to Comparison View](./comparison_view)")
         else:
             st.markdown("[📝 Proceed to Editing Page](./editing)")
 
