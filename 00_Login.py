@@ -1,5 +1,7 @@
 import streamlit as st
-
+if st.button("🚪 Logout"):
+    st.session_state.clear()
+    st.rerun()
 # -------------- User Credentials --------------
 users = {
     "admin": {"password": "admin123", "role": "admin"},
