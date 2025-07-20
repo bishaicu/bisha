@@ -26,11 +26,7 @@ st.title("🔐 Bisha ICU Dashboard Login")
 if "username" in st.session_state and "role" in st.session_state:
     st.success(f"✅ Already logged in as `{st.session_state.username}`")
 
-    if st.session_state["role"] == "admin":
-        st.markdown("[📊 Go to Comparison View](./comparison_view)")
-    else:
-        st.markdown("[📝 Go to Editing Page](./editing)")
-
+   
     st.stop()
 
 # -------------- Login Form --------------
