@@ -7,6 +7,12 @@ users = {
     "tathleeth": {"password": "tath123", "role": "tathleeth_user"},
     "alayah": {"password": "ala123", "role": "alalaya_user"}
 }
+if users[username]["role"] == "admin":
+    st.success("✅ Login successful as Admin!")
+    st.button("🔁 Proceed to Comparison View", on_click=lambda: switch_page("comparison_view"))
+else:
+    st.success("✅ Login successful as Hospital User!")
+    st.button("✍️ Proceed to Editing Page", on_click=lambda: switch_page("editing"))
 
 # -------------- Page Config --------------
 st.set_page_config(page_title="Bisha ICU Dashboard Login", layout="centered")
