@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-from streamlit_extras.switch_page_button import switch_page
+
 if st.button("🚪 Logout"):
     st.session_state.clear()
     st.rerun()
