@@ -4,7 +4,9 @@ import plotly.express as px
 from datetime import datetime
 import pytz
 
-
+if st.button("🚪 Logout"):
+    st.session_state.clear()
+    st.rerun()
 
 # ---- Role Guard ----
 if "role" not in st.session_state or st.session_state["role"] != "admin":
