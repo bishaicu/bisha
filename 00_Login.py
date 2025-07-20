@@ -26,12 +26,11 @@ st.title("🔐 Bisha ICU Dashboard Login")
 # -------------- Already Logged In --------------
 if "username" in st.session_state and "role" in st.session_state:
     st.success(f"✅ Already logged in as `{st.session_state.username}`")
-    if st.session_state["role"] == "admin":
-        if st.button("🔁 Proceed to Comparison View"):
-            switch_page("comparison_view")
-    else:
-        if st.button("✍️ Proceed to Editing Page"):
-            switch_page("editing")
+    
+    # Just show a refresh button
+    if st.button("🔄 Refresh"):
+        st.rerun()
+
     st.stop()
 
 # -------------- Login Form --------------
