@@ -2,14 +2,17 @@ import streamlit as st
 import pandas as pd
 from streamlit_extras.switch_page_button import switch_page
 
-# ---------- Login Guard ----------
-if "role" not in st.session_state:
-    st.error("🚫 You must be logged in. Redirecting to login...")
-    switch_page("00_Login")
 
-# ---------- Page Setup ----------
+# ---- Role Guard ----
+if "role" not in st.session_state or st.session_state["role"] == "admin":
+    st.error("🚫 Access denied. Not allowed for admin.")
+    st.stop()
+
+# ---- Page Setup ----
 st.set_page_config(layout="wide")
-st.title("📝 ICU KPI Data Entry")
+st.title("📝 ICU Data Entry (Hospital Staff Only)")
+
+st.write("Welcome hospital team! You can enter and manage your ICU data here.")
 
 # ---------- Load Existing Data ----------
 try:
