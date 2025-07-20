@@ -1,4 +1,5 @@
 import streamlit as st
+from streamlit_extras.switch_page_button import switch_page
 
 # -------------- User Credentials --------------
 users = {
@@ -7,12 +8,6 @@ users = {
     "tathleeth": {"password": "tath123", "role": "tathleeth_user"},
     "alayah": {"password": "ala123", "role": "alalaya_user"}
 }
-if users[username]["role"] == "admin":
-    st.success("✅ Login successful as Admin!")
-    st.button("🔁 Proceed to Comparison View", on_click=lambda: switch_page("comparison_view"))
-else:
-    st.success("✅ Login successful as Hospital User!")
-    st.button("✍️ Proceed to Editing Page", on_click=lambda: switch_page("editing"))
 
 # -------------- Page Config --------------
 st.set_page_config(page_title="Bisha ICU Dashboard Login", layout="centered")
@@ -31,8 +26,12 @@ st.title("🔐 Bisha ICU Dashboard Login")
 # -------------- Already Logged In --------------
 if "username" in st.session_state and "role" in st.session_state:
     st.success(f"✅ Already logged in as `{st.session_state.username}`")
-
-   
+    if st.session_state["role"] == "admin":
+        if st.button("🔁 Proceed to Comparison View"):
+            switch_page("comparison_view")
+    else:
+        if st.button("✍️ Proceed to Editing Page"):
+            switch_page("editing")
     st.stop()
 
 # -------------- Login Form --------------
@@ -45,11 +44,10 @@ if st.button("🔓 Login"):
         st.session_state["role"] = users[username]["role"]
         st.success("✅ Login successful!")
 
+        # Redirect based on role
         if users[username]["role"] == "admin":
-            st.markdown("[📊 Proceed to Comparison View](./comparison_view)")
+            switch_page("comparison_view")
         else:
-            st.markdown("[📝 Proceed to Editing Page](./editing)")
-
-        st.stop()
+            switch_page("editing")
     else:
         st.error("❌ Invalid username or password")
