@@ -3,6 +3,22 @@ import pandas as pd
 
 
 
+# 🚪 Logout Button
+if st.button("🚪 Logout"):
+    st.session_state.clear()
+    st.rerun()
+
+# 🔒 Access Control (non-admins only)
+if "role" not in st.session_state or st.session_state["role"] == "admin":
+    st.error("🚫 Access denied. This page is only for hospital users.")
+    st.stop()
+
+# 📝 Page Content
+st.set_page_config(page_title="ICU Editing Page", layout="wide")
+st.title("📝 ICU Data Entry Page")
+
+st.markdown("Welcome! Please enter your hospital ICU data below.")
+
 # ---------- Load Existing Data ----------
 try:
     data = pd.read_csv("data.csv")
