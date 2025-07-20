@@ -1,20 +1,7 @@
 import streamlit as st
 import pandas as pd
 
-if st.button("🚪 Logout"):
-    st.session_state.clear()
-    st.rerun()
 
-# ---- Role Guard ----
-if "role" not in st.session_state or st.session_state["role"] == "admin":
-    st.error("🚫 Access denied. Not allowed for admin.")
-    st.stop()
-
-# ---- Page Setup ----
-st.set_page_config(layout="wide")
-st.title("📝 ICU Data Entry (Hospital Staff Only)")
-
-st.write("Welcome hospital team! You can enter and manage your ICU data here.")
 
 # ---------- Load Existing Data ----------
 try:
