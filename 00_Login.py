@@ -9,7 +9,7 @@ users = {
 }
 
 # -------------- Page Config --------------
-st.set_page_config(page_title="ICU Dashboard Login", layout="centered")
+st.set_page_config(page_title="Bisha ICU Dashboard Login", layout="centered")
 
 st.markdown("""
     <style>
@@ -18,7 +18,7 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-st.title("🔐 ICU Dashboard Login")
+st.title("🔐 Bisha ICU Dashboard Login")
 
 # -------------- Already Logged In --------------
 if "username" in st.session_state and "role" in st.session_state:
