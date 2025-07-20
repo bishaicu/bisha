@@ -51,3 +51,7 @@ if st.button("🔓 Login"):
             switch_page("edi_view")
     else:
         st.error("❌ Invalid username or password")
+# Add this at the bottom of your login page
+st.markdown("---")
+if st.button("🔄 Refresh"):
+    st.rerun()
