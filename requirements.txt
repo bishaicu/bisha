@@ -1,4 +1,4 @@
-pages/comparison_view.py
+
 pages/editing.pystreamlit==1.47.0
 pandas==2.3.1
 plotly==6.2.0
