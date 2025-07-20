@@ -3,7 +3,9 @@ import pandas as pd
 import plotly.express as px
 from datetime import datetime
 import pytz
-
+if st.button("🚪 Logout"):
+    st.session_state.clear()
+    st.rerun()
 # ---------- Guard Page ----------
 params = st.experimental_get_query_params()
 if params.get("page") != ["main"]:
