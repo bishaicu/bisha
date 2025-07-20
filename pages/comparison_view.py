@@ -4,13 +4,19 @@ import plotly.express as px
 from datetime import datetime
 import pytz
 
-# ---------- Login Guard ----------
-if "role" not in st.session_state:
-    st.error("🚫 You must be logged in.")
+
+
+# ---- Role Guard ----
+if "role" not in st.session_state or st.session_state["role"] != "admin":
+    st.error("🚫 Access denied. Admin only.")
     st.stop()
 
-# ---------- Page Setup ----------
+# ---- Page Setup ----
 st.set_page_config(layout="wide")
+st.title("📊 Comparison View (Admin Only)")
+
+st.write("Welcome, Admin! This page is restricted to you.")
+
 
 # ---------- Header and Time ----------
 st.markdown("<h1 style='color:white; font-size:40px;'>ICU KPI Comparison View – Bisha Region</h1>", unsafe_allow_html=True)
