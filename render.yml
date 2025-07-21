@@ -1,0 +1,8 @@
+services:
+  - type: web
+    name: bisha-icu-dashboard
+    env: python
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "streamlit run 00_Login.py"
+    plan: free
+    autoDeploy: true
