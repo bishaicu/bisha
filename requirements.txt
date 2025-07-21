@@ -1,5 +1,5 @@
 streamlit==1.25.0
-streamlit-extras==0.2.9
+
 pandas
 plotly
 pytz
