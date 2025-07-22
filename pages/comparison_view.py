@@ -10,7 +10,7 @@ from io import BytesIO
 st.set_page_config(page_title="ICU KPI Comparison", layout="wide")
 st.title("🏥 ICU KPI Dashboard – Comparison View")
 
-# Load ICU Data
+# --- Load Data ---
 csv_path = "icu_data.csv"
 if not os.path.exists(csv_path):
     st.warning("No ICU data submitted yet.")
@@ -19,10 +19,23 @@ if not os.path.exists(csv_path):
 try:
     df = pd.read_csv(csv_path)
 except Exception as e:
-    st.error(f"Failed to read data: {e}")
+    st.error(f"❌ Failed to read data: {e}")
     st.stop()
 
-# KPI Calculations
+if df.empty:
+    st.info("📭 No data available.")
+    st.stop()
+
+# --- KPI Calculations ---
+required_columns = [
+    "Total Beds", "Occupied Beds", "Discharges (Last 24h)",
+    "Deaths (Last 24h)", "Infected Patients (Last 24h)", "Re-admissions within 48h"
+]
+missing = [col for col in required_columns if col not in df.columns]
+if missing:
+    st.error(f"❌ Missing required columns: {', '.join(missing)}")
+    st.stop()
+
 df["Occupancy Rate (%)"] = (df["Occupied Beds"] / df["Total Beds"] * 100).round(2)
 df["Discharge Rate (%)"] = (df["Discharges (Last 24h)"] / df["Occupied Beds"] * 100).round(2)
 df["Mortality Rate (%)"] = (df["Deaths (Last 24h)"] / df["Occupied Beds"] * 100).round(2)
@@ -30,11 +43,11 @@ df["ICU Bed Turnover Rate"] = (df["Discharges (Last 24h)"] / df["Total Beds"]).r
 df["Infection Rate (%)"] = (df["Infected Patients (Last 24h)"] / df["Occupied Beds"] * 100).round(2)
 df["Readmission Rate (%)"] = (df["Re-admissions within 48h"] / df["Occupied Beds"] * 100).round(2)
 
-# Time
+# --- Time Display ---
 riyadh_time = datetime.now(pytz.timezone("Asia/Riyadh")).strftime("%Y-%m-%d %H:%M:%S")
-st.markdown(f"**🕒 Riyadh Time:** {riyadh_time}")
+st.markdown(f"**🕒 Riyadh Time:** `{riyadh_time}`")
 
-# Filters
+# --- Filters ---
 dates = sorted(df["Date"].unique(), reverse=True)
 selected_date = st.selectbox("📅 Filter by Date", dates)
 hospitals = ["All"] + sorted(df["Hospital"].unique())
@@ -44,10 +57,11 @@ filtered_df = df[df["Date"] == selected_date]
 if selected_hospital != "All":
     filtered_df = filtered_df[filtered_df["Hospital"] == selected_hospital]
 
-# Show Table
+# --- Data Table ---
+st.subheader("📋 Filtered ICU Data")
 st.dataframe(filtered_df, use_container_width=True)
 
-# Charts
+# --- KPI Charts ---
 st.subheader("📊 KPI Comparison Charts")
 kpi_list = [
     "Occupancy Rate (%)", "Discharge Rate (%)", "Mortality Rate (%)",
@@ -55,22 +69,24 @@ kpi_list = [
 ]
 
 for kpi in kpi_list:
-    if len(filtered_df) > 0:
+    if not filtered_df.empty:
         fig = px.bar(filtered_df, x="Hospital", y=kpi, color=kpi,
                      color_continuous_scale=["red", "orange", "green"],
                      text_auto=True, title=kpi)
         st.plotly_chart(fig, use_container_width=True)
 
-# Export to Excel
-def generate_excel_download_link(df):
+# --- Export to Excel ---
+def generate_excel_download_link(df, filename):
+    if df.empty:
+        return "⚠️ No data to export."
     output = BytesIO()
     writer = pd.ExcelWriter(output, engine='xlsxwriter')
     df.to_excel(writer, index=False, sheet_name='ICU KPI')
     writer.close()
     processed_data = output.getvalue()
     b64 = base64.b64encode(processed_data).decode()
-    href = f'<a href="data:application/octet-stream;base64,{b64}" download="icu_kpi_{selected_date}.xlsx">📥 Download KPI Report as Excel</a>'
+    href = f'<a href="data:application/octet-stream;base64,{b64}" download="{filename}">📥 Download KPI Report as Excel</a>'
     return href
 
 st.markdown("---")
-st.markdown(generate_excel_download_link(filtered_df), unsafe_allow_html=True)
+st.markdown(generate_excel_download_link(filtered_df, f"icu_kpi_{selected_date}.xlsx"), unsafe_allow_html=True)
