@@ -10,7 +10,7 @@ from io import BytesIO
 st.set_page_config(page_title="ICU KPI Comparison", layout="wide")
 st.title("🏥 ICU KPI Dashboard – Comparison View")
 
-# --- Load Data ---
+# Load ICU Data
 csv_path = "icu_data.csv"
 if not os.path.exists(csv_path):
     st.warning("No ICU data submitted yet.")
@@ -26,16 +26,7 @@ if df.empty:
     st.info("📭 No data available.")
     st.stop()
 
-# --- KPI Calculations ---
-required_columns = [
-    "Total Beds", "Occupied Beds", "Discharges (Last 24h)",
-    "Deaths (Last 24h)", "Infected Patients (Last 24h)", "Re-admissions within 48h"
-]
-missing = [col for col in required_columns if col not in df.columns]
-if missing:
-    st.error(f"❌ Missing required columns: {', '.join(missing)}")
-    st.stop()
-
+# KPI Calculations
 df["Occupancy Rate (%)"] = (df["Occupied Beds"] / df["Total Beds"] * 100).round(2)
 df["Discharge Rate (%)"] = (df["Discharges (Last 24h)"] / df["Occupied Beds"] * 100).round(2)
 df["Mortality Rate (%)"] = (df["Deaths (Last 24h)"] / df["Occupied Beds"] * 100).round(2)
@@ -43,11 +34,11 @@ df["ICU Bed Turnover Rate"] = (df["Discharges (Last 24h)"] / df["Total Beds"]).r
 df["Infection Rate (%)"] = (df["Infected Patients (Last 24h)"] / df["Occupied Beds"] * 100).round(2)
 df["Readmission Rate (%)"] = (df["Re-admissions within 48h"] / df["Occupied Beds"] * 100).round(2)
 
-# --- Time Display ---
+# Riyadh Time
 riyadh_time = datetime.now(pytz.timezone("Asia/Riyadh")).strftime("%Y-%m-%d %H:%M:%S")
 st.markdown(f"**🕒 Riyadh Time:** `{riyadh_time}`")
 
-# --- Filters ---
+# Filters
 dates = sorted(df["Date"].unique(), reverse=True)
 selected_date = st.selectbox("📅 Filter by Date", dates)
 hospitals = ["All"] + sorted(df["Hospital"].unique())
@@ -57,11 +48,11 @@ filtered_df = df[df["Date"] == selected_date]
 if selected_hospital != "All":
     filtered_df = filtered_df[filtered_df["Hospital"] == selected_hospital]
 
-# --- Data Table ---
+# Show Data
 st.subheader("📋 Filtered ICU Data")
 st.dataframe(filtered_df, use_container_width=True)
 
-# --- KPI Charts ---
+# Charts
 st.subheader("📊 KPI Comparison Charts")
 kpi_list = [
     "Occupancy Rate (%)", "Discharge Rate (%)", "Mortality Rate (%)",
@@ -75,7 +66,7 @@ for kpi in kpi_list:
                      text_auto=True, title=kpi)
         st.plotly_chart(fig, use_container_width=True)
 
-# --- Export to Excel ---
+# Excel Export
 def generate_excel_download_link(df, filename):
     if df.empty:
         return "⚠️ No data to export."
@@ -83,9 +74,8 @@ def generate_excel_download_link(df, filename):
     writer = pd.ExcelWriter(output, engine='xlsxwriter')
     df.to_excel(writer, index=False, sheet_name='ICU KPI')
     writer.close()
-    processed_data = output.getvalue()
-    b64 = base64.b64encode(processed_data).decode()
-    href = f'<a href="data:application/octet-stream;base64,{b64}" download="{filename}">📥 Download KPI Report as Excel</a>'
+    b64 = base64.b64encode(output.getvalue()).decode()
+    href = f'<a href=\"data:application/octet-stream;base64,{b64}\" download=\"{filename}\">📥 Download KPI Report as Excel</a>'
     return href
 
 st.markdown("---")
